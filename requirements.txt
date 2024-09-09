@@ -1,0 +1,10 @@
+openai
+requests
+pillow
+fastapi
+uvicorn
+python-dotenv
+beautifulsoup4
+selenium
+lxml
+fake_useragent 
