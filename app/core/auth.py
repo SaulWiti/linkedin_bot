@@ -1,5 +1,8 @@
 from fastapi import HTTPException, Header
 from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_KEY_AUTH = getenv('API_KEY_AUTH')
 

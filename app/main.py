@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 import uvicorn
 
 from services.linkedin_scraper.get_text_link import get_cv_text_linkedin
-from dependencies.auth import get_api_key
+from core.auth import get_api_key
 from schemas.shema import RequestData
 
 app = FastAPI()

@@ -30,7 +30,9 @@ from os import getenv
 import os
 import pickle
 
-import asyncio
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # =================================================================================================================================== 
 
@@ -151,132 +153,137 @@ def procesar_url(url_perfil):
 
 async def get_html_text(url_perfil):
     try:
-        print('Empieza')
-        print(url_perfil)
-        url_perfil = procesar_url(url_perfil)
-        print(url_perfil)
+        con = 2
 
-        #profile_path = '/app/module_link/spf0s97m.default-release' # para docker
-        #profile_path = '/module_link/spf0s97m.default-release' # localmente
-        #profile_path = "C:/Users/Zaid96/AppData/Local/Mozilla/Firefox/Profiles/spf0s97m.default-release"
-        #profile_path = "spf0s97m.default-release"
-        options = Options()
+        while con > 0:
+            con-=1
+            print('Empieza')
+            print(url_perfil)
+            url_perfil = procesar_url(url_perfil)
+            print(url_perfil)
 
-        #options.add_argument("--headless")
-        #options.add_argument(f'-profile {profile_path}')
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-gpu")
-        #options.add_argument("--disable-features=NetworkService")
-        #options.add_argument("--incognito")
-        #options.add_argument("--disable-extensions")
-        #options.add_argument("--disable-popup-blocking")
-        #options.add_argument("--disable-infobars")
-        #options.add_argument("--disable-notifications")
-        ua = UserAgent()
-        options.add_argument(f"user-agent={ua.random}")
-        print('Opciones cargadas')
+            #profile_path = '/app/module_link/spf0s97m.default-release' # para docker
+            #profile_path = '/module_link/spf0s97m.default-release' # localmente
+            #profile_path = "C:/Users/Zaid96/AppData/Local/Mozilla/Firefox/Profiles/spf0s97m.default-release"
+            #profile_path = "spf0s97m.default-release"
+            options = Options()
 
-        driver = webdriver.Firefox(options=options)
-        print('driver cargado')
-        
-        driver.get("https://www.linkedin.com/login")
-        user = "dsaul449@gmail.com"
-        password = "Saul1996*7linkedin"
+            #options.add_argument("--headless")
+            #options.add_argument(f'-profile {profile_path}')
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--disable-gpu")
+            #options.add_argument("--disable-features=NetworkService")
+            #options.add_argument("--incognito")
+            #options.add_argument("--disable-extensions")
+            #options.add_argument("--disable-popup-blocking")
+            #options.add_argument("--disable-infobars")
+            #options.add_argument("--disable-notifications")
+            ua = UserAgent()
+            options.add_argument(f"user-agent={ua.random}")
+            print('Opciones cargadas')
 
-        if not cookie_exist():
-            print("creating cookies flow")
-            # if True:
+            driver = webdriver.Firefox(options=options)
+            print('driver cargado')
             
-            time.sleep(random.uniform(1,3))
-            
-            # Ubicar y llenar el campo de email/teléfono
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            # Realizar una búsqueda en Google
-            username_input = WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.ID, 'username'))
-            )
-            ActionChains(driver).move_to_element(username_input).perform()
-            username_input.click()
-            username_input.send_keys(user)
+            driver.get("https://www.linkedin.com/login")
+            user = getenv("USER_LINKEDIN")
+            password = getenv("PASSWORD_LINKEDIN")
 
-            time.sleep(random.uniform(2,4))
-            
-            # Ubicar y llenar el campo de contraseña
-            password_input = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.ID, 'password'))
-            )
-            ActionChains(driver).move_to_element(username_input).perform()
-            password_input.click()
-            password_input.send_keys(password)
+            if not cookie_exist():
+                print("creating cookies flow")
+                # if True:
+                
+                time.sleep(random.uniform(1,3))
+                
+                # Ubicar y llenar el campo de email/teléfono
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                # Realizar una búsqueda en Google
+                username_input = WebDriverWait(driver, 20).until(
+                    EC.presence_of_element_located((By.ID, 'username'))
+                )
+                ActionChains(driver).move_to_element(username_input).perform()
+                username_input.click()
+                username_input.send_keys(user)
 
-            time.sleep(random.uniform(1,2))
-            
-            # Presionar Enter o ubicar el botón de inicio de sesión y hacer clic
-            password_input.send_keys(Keys.ENTER)
-            
-            time.sleep(random.uniform(200, 250))
-
-            save_cookies(driver)
-        else:
-            
-            print("loading... cookies")
-
-            # TAKE COFFE
-            load_cookies(driver)
-            print("cookies loaded!!! and refreshing")
-            driver.refresh()
-            #time.sleep(random.uniform(3, 6))
-            #driver.get("https://www.linkedin.com/login")
-            
-            """
-            try:
-                time.sleep(random.uniform(3, 6))
+                time.sleep(random.uniform(2,4))
+                
+                # Ubicar y llenar el campo de contraseña
                 password_input = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.ID, 'password'))
                 )
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                ActionChains(driver).move_to_element(password_input).perform()
+                ActionChains(driver).move_to_element(username_input).perform()
                 password_input.click()
                 password_input.send_keys(password)
-                time.sleep(random.uniform(1,2))
 
+                time.sleep(random.uniform(1,2))
+                
                 # Presionar Enter o ubicar el botón de inicio de sesión y hacer clic
                 password_input.send_keys(Keys.ENTER)
-               
-            except Exception as e:
-                print(str(e))
+                
+                time.sleep(random.uniform(200, 250))
+
+                save_cookies(driver)
+            else:
+                
+                print("loading... cookies")
+
+                # TAKE COFFE
+                load_cookies(driver)
+                print("cookies loaded!!! and refreshing")
+                driver.refresh()
+                #time.sleep(random.uniform(3, 6))
+                #driver.get("https://www.linkedin.com/login")
+                
+                """
+                try:
+                    time.sleep(random.uniform(3, 6))
+                    password_input = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.ID, 'password'))
+                    )
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    ActionChains(driver).move_to_element(password_input).perform()
+                    password_input.click()
+                    password_input.send_keys(password)
+                    time.sleep(random.uniform(1,2))
+
+                    # Presionar Enter o ubicar el botón de inicio de sesión y hacer clic
+                    password_input.send_keys(Keys.ENTER)
+                
+                except Exception as e:
+                    print(str(e))
+                
+                """
+
+            print("ir a cargar perfil")
             
-            """
+            time.sleep(random.uniform(8, 10))
 
-        print("ir a cargar perfil")
-        
-        time.sleep(random.uniform(8, 10))
-
-        driver.get(url_perfil)
-        print("cargando perfil")
-        
-        time.sleep(random.uniform(10, 15))
-        
-        html_general_content = driver.page_source
-        
-        print('html obtenido')
-
-        texto_html = extraer_texto_etiquetas(html_general_content)
-        
-        #print(texto_html)
-        print('texto obtenido')
-
-        if await is_perfil(texto_html):
-            print("es perfil")
-            driver.quit()    
-            return texto_html
+            driver.get(url_perfil)
+            print("cargando perfil")
             
-        print('No es perfil')
+            time.sleep(random.uniform(12, 18))
+            
+            html_general_content = driver.page_source
+            
+            print('html obtenido')
 
-        driver.quit()
-        
+            texto_html = extraer_texto_etiquetas(html_general_content)
+            
+            #print(texto_html)
+            print('texto obtenido')
+
+            if con == 0 and await is_perfil(texto_html):
+                print("es perfil")
+                driver.quit()    
+                return texto_html
+                
+            print('No es perfil')
+
+            driver.quit()
+            
         return None
+    
     except Exception as e:
         print(f"error driver: {e}")
 
@@ -312,7 +319,6 @@ async def model_get_cv(text_link):
               {"role": "user", "content": user_message}
           ],
           temperature=0.0,
-          max_tokens=4096,
           seed = 250
         )
 
